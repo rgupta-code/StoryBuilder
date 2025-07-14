@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryBuilder Demo - Create Amazing Stories!</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-book-open"></i>
+                    StoryBuilder
+                </h1>
+                <p class="tagline">Create magical stories with AI!</p>
+                <div class="demo-badge">
+                    <i class="fas fa-play"></i>
+                    Demo Mode
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Story Creation Form -->
+            <div id="story-form" class="story-form-container">
+                <div class="form-card">
+                    <h2 class="form-title">Let's Create Your Story!</h2>
+                    
+                    <div class="form-group">
+                        <label for="story-topic">What's your story about?</label>
+                        <textarea 
+                            id="story-topic" 
+                            placeholder="Tell me about your story idea... (e.g., A brave little mouse who wants to be a knight)"
+                            rows="3"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="genre">Genre</label>
+                            <select id="genre">
+                                <option value="adventure">Adventure</option>
+                                <option value="fantasy">Fantasy</option>
+                                <option value="mystery">Mystery</option>
+                                <option value="comedy">Comedy</option>
+                                <option value="educational">Educational</option>
+                                <option value="fairy-tale">Fairy Tale</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tone">Tone</label>
+                            <select id="tone">
+                                <option value="funny">Funny & Silly</option>
+                                <option value="exciting">Exciting & Action-packed</option>
+                                <option value="gentle">Gentle & Calm</option>
+                                <option value="mysterious">Mysterious & Magical</option>
+                                <option value="educational">Educational & Learning</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age-group">Age Group</label>
+                            <select id="age-group">
+                                <option value="3-5">3-5 years</option>
+                                <option value="6-8">6-8 years</option>
+                                <option value="9-12">9-12 years</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="story-length">Story Length</label>
+                            <select id="story-length">
+                                <option value="short">Short (2-3 pages)</option>
+                                <option value="medium">Medium (4-6 pages)</option>
+                                <option value="long">Long (7-10 pages)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="demo-notice">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Demo Mode:</strong> This is a preview of the StoryBuilder interface. 
+                        To create real stories, use the full version with a Gemini API key.
+                    </div>
+
+                    <button id="create-story-btn" class="create-btn">
+                        <i class="fas fa-magic"></i>
+                        Try Demo Story!
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading-state" class="loading-container hidden">
+                <div class="loading-card">
+                    <div class="loading-animation">
+                        <div class="spinner"></div>
+                    </div>
+                    <h3>Creating Your Story...</h3>
+                    <p>Our AI is weaving magic into your story!</p>
+                </div>
+            </div>
+
+            <!-- Story Display -->
+            <div id="story-display" class="story-display-container hidden">
+                <div class="story-controls">
+                    <button id="back-to-form" class="control-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Create New Story
+                    </button>
+                    
+                    <div class="view-controls">
+                        <button id="single-page-view" class="view-btn active">
+                            <i class="fas fa-file-alt"></i>
+                            Single Page
+                        </button>
+                        <button id="book-view" class="view-btn">
+                            <i class="fas fa-book"></i>
+                            Book View
+                        </button>
+                    </div>
+
+                    <button id="download-story" class="control-btn">
+                        <i class="fas fa-download"></i>
+                        Download
+                    </button>
+                </div>
+
+                <!-- Single Page View -->
+                <div id="single-page-container" class="story-view-container">
+                    <div class="page-navigation">
+                        <button id="prev-page" class="nav-btn">
+                            <i class="fas fa-chevron-left"></i>
+                            Previous
+                        </button>
+                        <span id="page-indicator" class="page-indicator">Page 1 of 1</span>
+                        <button id="next-page" class="nav-btn">
+                            Next
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="single-page-content" class="page-content">
+                        <!-- Story content will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Book View -->
+                <div id="book-container" class="book-container hidden">
+                    <div class="book">
+                        <div id="book-pages" class="book-pages">
+                            <!-- Book pages will be inserted here -->
+                        </div>
+                        <div class="book-controls">
+                            <button id="book-prev" class="book-nav-btn">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span id="book-page-indicator" class="book-page-indicator">1</span>
+                            <button id="book-next" class="book-nav-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 StoryBuilder. Made with ❤️ for young storytellers!</p>
+            <p><a href="index.html" style="color: white; text-decoration: underline;">Try the full version with AI</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Demo version with sample story
+        class StoryBuilderDemo {
+            constructor() {
+                this.currentStory = null;
+                this.currentPage = 0;
+                this.currentView = 'single';
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                document.getElementById('create-story-btn').addEventListener('click', () => {
+                    this.createDemoStory();
+                });
+
+                document.getElementById('single-page-view').addEventListener('click', () => {
+                    this.switchView('single');
+                });
+
+                document.getElementById('book-view').addEventListener('click', () => {
+                    this.switchView('book');
+                });
+
+                document.getElementById('prev-page').addEventListener('click', () => {
+                    this.previousPage();
+                });
+
+                document.getElementById('next-page').addEventListener('click', () => {
+                    this.nextPage();
+                });
+
+                document.getElementById('book-prev').addEventListener('click', () => {
+                    this.previousPage();
+                });
+
+                document.getElementById('book-next').addEventListener('click', () => {
+                    this.nextPage();
+                });
+
+                document.getElementById('back-to-form').addEventListener('click', () => {
+                    this.showForm();
+                });
+
+                document.getElementById('download-story').addEventListener('click', () => {
+                    this.downloadStory();
+                });
+            }
+
+            createDemoStory() {
+                const formData = this.getFormData();
+                
+                if (!formData.topic) {
+                    this.showError('Please tell us what your story is about!');
+                    return;
+                }
+
+                this.showLoading();
+                
+                // Simulate API call delay
+                setTimeout(() => {
+                    this.currentStory = this.generateDemoStory(formData);
+                    this.currentPage = 0;
+                    this.displayStory();
+                }, 2000);
+            }
+
+            getFormData() {
+                return {
+                    topic: document.getElementById('story-topic').value.trim(),
+                    genre: document.getElementById('genre').value,
+                    tone: document.getElementById('tone').value,
+                    ageGroup: document.getElementById('age-group').value,
+                    length: document.getElementById('story-length').value
+                };
+            }
+
+            generateDemoStory(formData) {
+                const demoStories = {
+                    'adventure': {
+                        title: 'The Brave Little Explorer',
+                        pages: [
+                            {
+                                title: 'The Brave Little Explorer',
+                                content: 'Once upon a time, there was a little mouse named Max who lived in a cozy hole under an old oak tree. Max loved to read books about faraway lands and dreamed of going on big adventures.',
+                                pageNumber: 0
+                            },
+                            {
+                                title: 'The Journey Begins',
+                                content: 'One sunny morning, Max packed his tiny backpack with cheese, a small map, and his favorite red scarf. "Today is the day!" he said to himself. "I\'m going to explore the big garden beyond our tree!"',
+                                pageNumber: 1
+                            },
+                            {
+                                title: 'New Friends',
+                                content: 'As Max walked through the tall grass, he met a friendly butterfly named Bella. "Hello there, little explorer!" she said. "Would you like me to show you around the garden?" Max was so excited to make a new friend!',
+                                pageNumber: 2
+                            }
+                        ]
+                    },
+                    'fantasy': {
+                        title: 'The Magic Garden',
+                        pages: [
+                            {
+                                title: 'The Magic Garden',
+                                content: 'In a world where flowers could talk and trees could dance, there was a special garden hidden behind a rainbow waterfall. This garden was home to the most magical creatures you could ever imagine.',
+                                pageNumber: 0
+                            },
+                            {
+                                title: 'The Rainbow Gate',
+                                content: 'Little Emma discovered the garden one day when she followed a glowing butterfly. The butterfly led her to a gate made entirely of rainbows. "Welcome to the Magic Garden," whispered the gate.',
+                                pageNumber: 1
+                            },
+                            {
+                                title: 'Dancing Flowers',
+                                content: 'Inside the garden, Emma found flowers that sang beautiful songs and danced in the breeze. The roses wore tiny crowns, and the daisies had sparkly wings. It was the most wonderful place Emma had ever seen!',
+                                pageNumber: 2
+                            }
+                        ]
+                    }
+                };
+
+                const storyType = formData.genre === 'fantasy' ? 'fantasy' : 'adventure';
+                return {
+                    title: demoStories[storyType].title,
+                    pages: demoStories[storyType].pages,
+                    metadata: formData
+                };
+            }
+
+            displayStory() {
+                this.hideLoading();
+                this.showStoryDisplay();
+                this.updatePageDisplay();
+            }
+
+            showLoading() {
+                document.getElementById('story-form').classList.add('hidden');
+                document.getElementById('story-display').classList.add('hidden');
+                document.getElementById('loading-state').classList.remove('hidden');
+            }
+
+            hideLoading() {
+                document.getElementById('loading-state').classList.add('hidden');
+            }
+
+            showStoryDisplay() {
+                document.getElementById('story-display').classList.remove('hidden');
+            }
+
+            showForm() {
+                document.getElementById('story-display').classList.add('hidden');
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('story-form').classList.remove('hidden');
+            }
+
+            switchView(view) {
+                this.currentView = view;
+                
+                document.getElementById('single-page-view').classList.toggle('active', view === 'single');
+                document.getElementById('book-view').classList.toggle('active', view === 'book');
+                
+                document.getElementById('single-page-container').classList.toggle('hidden', view !== 'single');
+                document.getElementById('book-container').classList.toggle('hidden', view !== 'book');
+                
+                this.updatePageDisplay();
+            }
+
+            updatePageDisplay() {
+                if (!this.currentStory || !this.currentStory.pages.length) return;
+
+                const currentPageData = this.currentStory.pages[this.currentPage];
+                
+                if (this.currentView === 'single') {
+                    this.updateSinglePageView(currentPageData);
+                } else {
+                    this.updateBookView();
+                }
+                
+                this.updateNavigation();
+            }
+
+            updateSinglePageView(pageData) {
+                const content = document.getElementById('single-page-content');
+                content.innerHTML = `
+                    <h3>${pageData.title}</h3>
+                    <p>${pageData.content}</p>
+                `;
+                
+                document.getElementById('page-indicator').textContent = 
+                    `Page ${this.currentPage + 1} of ${this.currentStory.pages.length}`;
+            }
+
+            updateBookView() {
+                const bookPages = document.getElementById('book-pages');
+                bookPages.innerHTML = '';
+                
+                this.currentStory.pages.forEach((page, index) => {
+                    const pageElement = document.createElement('div');
+                    pageElement.className = `book-page ${index === this.currentPage ? 'active' : ''}`;
+                    pageElement.innerHTML = `
+                        <h3>${page.title}</h3>
+                        <p>${page.content}</p>
+                    `;
+                    bookPages.appendChild(pageElement);
+                });
+                
+                document.getElementById('book-page-indicator').textContent = this.currentPage + 1;
+            }
+
+            updateNavigation() {
+                const totalPages = this.currentStory.pages.length;
+                const isFirstPage = this.currentPage === 0;
+                const isLastPage = this.currentPage === totalPages - 1;
+                
+                document.getElementById('prev-page').disabled = isFirstPage;
+                document.getElementById('next-page').disabled = isLastPage;
+                document.getElementById('book-prev').disabled = isFirstPage;
+                document.getElementById('book-next').disabled = isLastPage;
+            }
+
+            previousPage() {
+                if (this.currentPage > 0) {
+                    this.currentPage--;
+                    this.updatePageDisplay();
+                }
+            }
+
+            nextPage() {
+                if (this.currentPage < this.currentStory.pages.length - 1) {
+                    this.currentPage++;
+                    this.updatePageDisplay();
+                }
+            }
+
+            downloadStory() {
+                if (!this.currentStory) return;
+
+                const storyText = this.formatStoryForDownload();
+                const blob = new Blob([storyText], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${this.currentStory.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_demo.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            formatStoryForDownload() {
+                let text = `${this.currentStory.title}\n`;
+                text += '='.repeat(this.currentStory.title.length) + '\n\n';
+                
+                this.currentStory.pages.forEach((page, index) => {
+                    text += `Page ${index + 1}: ${page.title}\n`;
+                    text += '-'.repeat(page.title.length + 8) + '\n';
+                    text += page.content + '\n\n';
+                });
+                
+                text += `\nStory created with StoryBuilder Demo\n`;
+                text += `Genre: ${this.currentStory.metadata.genre}\n`;
+                text += `Tone: ${this.currentStory.metadata.tone}\n`;
+                text += `Age Group: ${this.currentStory.metadata.ageGroup}\n`;
+                text += `\nThis is a demo story. Get the full version with AI at: https://github.com/your-repo/storybuilder\n`;
+                
+                return text;
+            }
+
+            showError(message) {
+                this.hideLoading();
+                
+                const notification = document.createElement('div');
+                notification.className = 'error-notification';
+                notification.innerHTML = `
+                    <div class="error-content">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>${message}</span>
+                        <button onclick="this.parentElement.parentElement.remove()">×</button>
+                    </div>
+                `;
+                
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 10px;
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                    z-index: 1000;
+                    max-width: 400px;
+                    animation: slideIn 0.3s ease;
+                `;
+                
+                notification.querySelector('.error-content').style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                `;
+                
+                notification.querySelector('button').style.cssText = `
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                    margin-left: auto;
+                `;
+                
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 5000);
+            }
+        }
+
+        // Initialize the demo application
+        document.addEventListener('DOMContentLoaded', () => {
+            new StoryBuilderDemo();
+        });
+    </script>
+
+    <style>
+        .demo-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .demo-badge i {
+            margin-right: 0.5rem;
+        }
+
+        .demo-notice {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid #e17055;
+        }
+
+        .demo-notice i {
+            margin-right: 0.5rem;
+            color: #e17055;
+        }
+    </style>
+</body>
+</html> 

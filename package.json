@@ -1,0 +1,40 @@
+{
+  "name": "storybuilder",
+  "version": "1.0.0",
+  "description": "An interactive story creation tool for kids using AI",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "serve": "python -m http.server 8000"
+  },
+  "keywords": [
+    "story",
+    "ai",
+    "kids",
+    "education",
+    "gemini",
+    "interactive",
+    "web-app"
+  ],
+  "author": "StoryBuilder Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/storybuilder.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/storybuilder/issues"
+  },
+  "homepage": "https://github.com/your-username/storybuilder#readme",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+} 

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryBuilder - Create Amazing Stories!</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-book-open"></i>
+                    StoryBuilder
+                </h1>
+                <p class="tagline">Create magical stories with AI!</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Story Creation Form -->
+            <div id="story-form" class="story-form-container">
+                <div class="form-card">
+                    <h2 class="form-title">Let's Create Your Story!</h2>
+                    
+                    <div class="form-group">
+                        <label for="story-topic">What's your story about?</label>
+                        <textarea 
+                            id="story-topic" 
+                            placeholder="Tell me about your story idea... (e.g., A brave little mouse who wants to be a knight)"
+                            rows="3"
+                        ></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="genre">Genre</label>
+                            <select id="genre">
+                                <option value="adventure">Adventure</option>
+                                <option value="fantasy">Fantasy</option>
+                                <option value="mystery">Mystery</option>
+                                <option value="comedy">Comedy</option>
+                                <option value="educational">Educational</option>
+                                <option value="fairy-tale">Fairy Tale</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tone">Tone</label>
+                            <select id="tone">
+                                <option value="funny">Funny & Silly</option>
+                                <option value="exciting">Exciting & Action-packed</option>
+                                <option value="gentle">Gentle & Calm</option>
+                                <option value="mysterious">Mysterious & Magical</option>
+                                <option value="educational">Educational & Learning</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age-group">Age Group</label>
+                            <select id="age-group">
+                                <option value="3-5">3-5 years</option>
+                                <option value="6-8">6-8 years</option>
+                                <option value="9-12">9-12 years</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="story-length">Story Length</label>
+                            <select id="story-length">
+                                <option value="short">Short (2-3 pages)</option>
+                                <option value="medium">Medium (4-6 pages)</option>
+                                <option value="long">Long (7-10 pages)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="api-key">Gemini API Key (Required)</label>
+                        <input 
+                            type="password" 
+                            id="api-key" 
+                            placeholder="Enter your Gemini API key..."
+                        >
+                        <small class="help-text">
+                            <a href="https://makersuite.google.com/app/apikey" target="_blank">
+                                Get your free API key here
+                            </a>
+                            <br>
+                            <span style="color: #667eea; font-weight: 600;">✓ Uses Gemini 1.5 Flash (Free Tier)</span>
+                        </small>
+                    </div>
+
+                    <button id="create-story-btn" class="create-btn">
+                        <i class="fas fa-magic"></i>
+                        Create My Story!
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading-state" class="loading-container hidden">
+                <div class="loading-card">
+                    <div class="loading-animation">
+                        <div class="spinner"></div>
+                    </div>
+                    <h3>Creating Your Story...</h3>
+                    <p>Our AI is weaving magic into your story!</p>
+                </div>
+            </div>
+
+            <!-- Story Display -->
+            <div id="story-display" class="story-display-container hidden">
+                <div class="story-controls">
+                    <button id="back-to-form" class="control-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Create New Story
+                    </button>
+                    
+                    <div class="view-controls">
+                        <button id="single-page-view" class="view-btn active">
+                            <i class="fas fa-file-alt"></i>
+                            Single Page
+                        </button>
+                        <button id="book-view" class="view-btn">
+                            <i class="fas fa-book"></i>
+                            Book View
+                        </button>
+                    </div>
+
+                    <button id="download-story" class="control-btn">
+                        <i class="fas fa-download"></i>
+                        Download
+                    </button>
+                </div>
+
+                <!-- Single Page View -->
+                <div id="single-page-container" class="story-view-container">
+                    <div class="page-navigation">
+                        <button id="prev-page" class="nav-btn">
+                            <i class="fas fa-chevron-left"></i>
+                            Previous
+                        </button>
+                        <span id="page-indicator" class="page-indicator">Page 1 of 1</span>
+                        <button id="next-page" class="nav-btn">
+                            Next
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="single-page-content" class="page-content">
+                        <!-- Story content will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Book View -->
+                <div id="book-container" class="book-container hidden">
+                    <div class="book">
+                        <div id="book-pages" class="book-pages">
+                            <!-- Book pages will be inserted here -->
+                        </div>
+                        <div class="book-controls">
+                            <button id="book-prev" class="book-nav-btn">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span id="book-page-indicator" class="book-page-indicator">1</span>
+                            <button id="book-next" class="book-nav-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 StoryBuilder. Made with ❤️ for young storytellers!</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
